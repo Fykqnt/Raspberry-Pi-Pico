@@ -4,7 +4,7 @@ from machine import Pin, SPI, UART
 import utime
 import st7789
 from mh_z19 import MHZ19  # Ensure correct import based on your library
-from font8x8 import font8x8_basic  # Replace with actual font object
+from font8x8 import font8x8_basic  # Use the updated font object
 
 # Configuration Constants
 LCD_WIDTH = 135      # Adjust based on your display's resolution
