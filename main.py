@@ -57,7 +57,7 @@ def display_co2(co2, temp):
 # Main Loop
 while True:
     try:
-        data = sensor.read_data()
+        data = sensor.read_measurement()
         co2 = data.get('co2')
         temp = data.get('temperature')
         print(f'CO2: {co2} ppm')
