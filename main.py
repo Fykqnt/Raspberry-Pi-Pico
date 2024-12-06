@@ -3,8 +3,8 @@
 from machine import Pin, SPI, UART
 import utime
 import st7789
-import mh_z19
-import font8x8  # Import the font module
+from mh_z19 import MHZ19  # Ensure correct import based on your library
+from font8x8 import font8x8_basic  # Replace with actual font object
 
 # Configuration Constants
 LCD_WIDTH = 135      # Adjust based on your display's resolution
@@ -35,7 +35,7 @@ lcd = st7789.ST7789(
 
 # Initialize MH-Z19C sensor via UART1
 uart = UART(1, baudrate=9600, tx=Pin(4), rx=Pin(5))
-sensor = mh_z19.MHZ19(uart_id=1, uart=uart)
+sensor = MHZ19(uart_id=1, uart=uart)  # Adjust based on your library
 
 # Initialize LED pin for alert (optional)
 alert_led = Pin(16, Pin.OUT)
@@ -44,20 +44,20 @@ alert_led = Pin(16, Pin.OUT)
 def display_co2(co2, temp):
     lcd.fill(st7789.BLACK)  # Clear the screen
     if co2 is not None and temp is not None:
-        lcd.text(font8x8, f"CO2: {co2} ppm", 10, 10, st7789.WHITE)
-        lcd.text(font8x8, f"Temp: {temp} C", 10, 30, st7789.WHITE)
+        lcd.text(font8x8_basic, f"CO2: {co2} ppm", 10, 10, st7789.WHITE)
+        lcd.text(font8x8_basic, f"Temp: {temp} C", 10, 30, st7789.WHITE)
         if co2 > CO2_THRESHOLD:
             alert_led.on()  # Turn on LED
-            lcd.text(font8x8, "ALERT!", 50, 120, st7789.RED)
+            lcd.text(font8x8_basic, "ALERT!", 50, 120, st7789.RED)
         else:
             alert_led.off()  # Turn off LED
     else:
-        lcd.text(font8x8, "No Data", 10, 10, st7789.WHITE)
+        lcd.text(font8x8_basic, "No Data", 10, 10, st7789.WHITE)
 
 # Main Loop
 while True:
     try:
-        data = sensor.read_measurement()
+        data = sensor.read_measurement()  # Use the correct method
         co2 = data.get('co2')
         temp = data.get('temperature')
         print(f'CO2: {co2} ppm')
@@ -66,6 +66,6 @@ while True:
     except Exception as e:
         print(f"Error reading sensor: {e}")
         lcd.fill(st7789.BLACK)
-        lcd.text(font8x8, "Sensor Error", 10, 10, st7789.RED)
+        lcd.text(font8x8_basic, "Sensor Error", 10, 10, st7789.RED)
         alert_led.on()
     utime.sleep(2)  # Update every 2 seconds
