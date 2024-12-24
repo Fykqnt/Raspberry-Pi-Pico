@@ -1,5 +1,4 @@
 from machine import Pin, UART, I2C
-import ssd1306
 import utime
 import network
 import urequests
@@ -24,7 +23,7 @@ mhz19c = UART(1, baudrate=9600, tx=Pin(4), rx=Pin(5))
 
 # Initialize I2C for SSD1306 display
 i2c = I2C(0, sda=Pin(0), scl=Pin(1))
-display = ssd1306.SSD1306_I2C(128, 32, i2c)
+#display = ssd1306.SSD1306_I2C(128, 32, i2c)
 
 # Flag to track previous CO2 state
 previous_above_threshold = False
@@ -98,18 +97,18 @@ while True:
     print('Temperature (C):', temp)
 
     # Update display
-    display.fill(0)
-    display.text(f'CO2: {co2} ppm', 0, 0, 1)
-    display.text(f'Temp: {temp} degrees', 0, 10, 1)
+    #display.fill(0)
+    #display.text(f'CO2: {co2} ppm', 0, 0, 1)
+    #display.text(f'Temp: {temp} degrees', 0, 10, 1)
 
     if (co2 >= CO2_THRESHOLD) and (co2 <= Upper_CO2_THRESHOLD):
-        display.text('OPEN THE WINDOW', 0, 20, 1)
+        #display.text('OPEN THE WINDOW', 0, 20, 1)
         if not previous_above_threshold:
             send_slack_notification(f"High CO₂ Level Detected!\nCO₂: {co2} ppm\nTemperature: {temp}°C\nPlease ventilate the area.")
             previous_above_threshold = True
     else:
         previous_above_threshold = False  # Reset when below threshold
 
-    display.show()
+    #isplay.show()
 
     utime.sleep(1)
