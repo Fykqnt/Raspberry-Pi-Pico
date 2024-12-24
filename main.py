@@ -16,6 +16,7 @@ SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/xxxxxxxxxx'
 
 # CO2 threshold
 CO2_THRESHOLD = 1000  # ppm
+Upper_CO2_THRESHOLD = 10000  # ppm
 
 # --------------------------------------------------------
 # Initialize UART for MH-Z19C
@@ -101,7 +102,7 @@ while True:
     display.text(f'CO2: {co2} ppm', 0, 0, 1)
     display.text(f'Temp: {temp} degrees', 0, 10, 1)
 
-    if co2 >= CO2_THRESHOLD:
+    if (co2 >= CO2_THRESHOLD) and (co2 <= Upper_CO2_THRESHOLD):
         display.text('OPEN THE WINDOW', 0, 20, 1)
         if not previous_above_threshold:
             send_slack_notification(f"High CO₂ Level Detected!\nCO₂: {co2} ppm\nTemperature: {temp}°C\nPlease ventilate the area.")
